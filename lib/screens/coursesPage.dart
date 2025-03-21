@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:splashgolfclub/class/golfCourse.dart';
-import 'package:splashgolfclub/components/faqAccordian.dart';
 import 'package:splashgolfclub/components/golfCourseCard.dart';
 import 'package:splashgolfclub/components/header.dart';
-import 'package:splashgolfclub/components/reviewCard.dart';
-import 'package:splashgolfclub/components/weatherCard.dart';
-import 'package:splashgolfclub/screens/courseBooking.dart';
+import 'package:splashgolfclub/screens/courseDetails.dart';
 
 void main() {
   runApp(SplashGolfClubAppCourse());
@@ -43,7 +40,6 @@ class SplashGolfClubAppCourse extends StatelessWidget {
             child: Center(
                 child: SizedBox(
             width: 390,
-            height: 844,
             child: SingleChildScrollView(
               padding: EdgeInsets.fromLTRB(24, 16, 24, 16),
               child: Column(

@@ -24,7 +24,6 @@ class SplashGolfClubApp extends StatelessWidget {
             child: Center(
               child: SizedBox(
                 width: 390,
-                height: 844,
                 child: SingleChildScrollView(
                   padding: EdgeInsets.fromLTRB(24, 16, 24, 16),
                   child: Column(

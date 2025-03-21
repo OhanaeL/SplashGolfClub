@@ -28,14 +28,14 @@ class Header extends StatelessWidget {
                 Text(
                   title,
                   style: const TextStyle(
-                    fontSize: 24,
+                    fontSize: 22,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ],
             ),
           ),
-          Icon(Icons.settings, size: 34.0),
+          Icon(Icons.menu, size: 34.0),
         ],
       ),
     );

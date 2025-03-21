@@ -95,7 +95,7 @@ class GolfHolesGrid extends StatelessWidget {
       height: 50,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.green,
+          backgroundColor: Colors.green[800],
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),

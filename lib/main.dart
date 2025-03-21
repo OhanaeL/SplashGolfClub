@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:splashgolfclub/screens/coursesPage.dart';
-import 'package:splashgolfclub/screens/homePage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -33,7 +32,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: SplashGolfClubAppCourse(),
+      home: SplashGolfClubAppCourse()
     );
   }
 }
