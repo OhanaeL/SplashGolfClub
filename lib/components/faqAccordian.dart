@@ -9,26 +9,27 @@ class FAQAccordion extends StatelessWidget {
   Widget build(BuildContext context) {
     final defaultFaqs = [
       {
-        'question': 'What is Flutter?',
-        'answer': 'Flutter is an open-source UI software development kit created by Google.',
+        'question': 'Why can\'t I book a tee time without an account?',
+        'answer': 'Our golf club requires all users to register before booking to ensure a seamless experience and track reservations properly. Guest or visitor bookings are not allowed for simplicity.',
       },
       {
-        'question': 'How do I install Flutter?',
-        'answer': 'You can install Flutter by following the instructions on the official website.',
+        'question': 'Can I reschedule my booking?',
+        'answer': 'No, rescheduling, and refunds are not allowed once a booking is confirmed. Please make sure to check your availability before finalizing your reservation.',
       },
       {
-        'question': 'What is Dart?',
-        'answer': 'Dart is the programming language used to build Flutter apps.',
+        'question': 'Where can I find my booking details?',
+        'answer': 'You can find all your booking details by clicking on the \'Profile\' button, going to your Account, and scrolling down to the \'Bookings\' section. This will display all your past and upcoming reservations.',
       },
       {
-        'question': 'What is a StatelessWidget?',
-        'answer': 'A StatelessWidget is a widget that does not require mutable state.',
+        'question': 'How can I know if my desired tee time is available?',
+        'answer': 'You can check available tee times by navigating to the \'Book Tee Time\' section. If a tee time is already booked by another user, it will be locked and unavailable for selection. Only available slots will be shown for booking..',
       },
       {
-        'question': 'What is a StatefulWidget?',
-        'answer': 'A StatefulWidget is a widget that has mutable state that can change during the lifetime of the widget.',
+        'question': 'Can I book golf lessons or instructors through the website?',
+        'answer': 'No, our website does not offer online booking for golf lessons or instructors. However, when you arrive at the golf course, you can check in at the reception counter, where you may be able to arrange for an instructor based on availability.',
       },
     ];
+
 
     final faqList = faqs.isEmpty ? defaultFaqs : faqs;
 
@@ -41,7 +42,7 @@ class FAQAccordion extends StatelessWidget {
               'FAQ',
               style: TextStyle(
                 fontSize: 20,
-                color: Colors.blue,
+                color: Colors.green,
                 fontWeight: FontWeight.bold,
               ),
               textAlign: TextAlign.center,

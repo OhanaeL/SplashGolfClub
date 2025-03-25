@@ -91,9 +91,7 @@ class BookingConfirmationScreen extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         backgroundColor: Colors.white,
-        appBar: PreferredSize(
-            preferredSize: Size.fromHeight(60), // Height of your custom header
-            child: Header(title: "SPLASH GOLF CLUB")),
+        appBar: Header(title: 'SPLASH GOLF CLUB'),
         body: SingleChildScrollView(
           child: SafeArea(
               child: Stack(
@@ -228,7 +226,7 @@ class BookingConfirmationScreen extends StatelessWidget {
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) =>
-                                                SplashGolfClubAppCourse(),
+                                                CoursesPage(),
                                           ),
                                         );
                                       },

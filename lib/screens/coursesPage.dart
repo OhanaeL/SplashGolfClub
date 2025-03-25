@@ -1,29 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:splashgolfclub/class/golfCourse.dart';
 import 'package:splashgolfclub/components/golfCourseCard.dart';
 import 'package:splashgolfclub/components/header.dart';
 import 'package:splashgolfclub/screens/courseDetails.dart';
+import 'package:splashgolfclub/screens/loginPage.dart';
 
 void main() {
-  runApp(SplashGolfClubAppCourse());
+  runApp(CoursesPage());
 }
 
-class SplashGolfClubAppCourse extends StatelessWidget {
+class CoursesPage extends StatelessWidget {
   List<GolfCourse> golfCourses = [
     GolfCourse(
       imagePath: 'assets/golfclubPlaceholder.png',
       title: 'Hackathon',
+      courseId: '-2147483647',
       holes: 18,
       par: 72,
       description:
           'Nestled in the heart of lush greenery, Hackathon Golf Course offers an exceptional golfing experience for players of all skill levels. This 18-hole, par-72 championship course is designed to challenge and inspire, featuring strategically placed bunkers, rolling fairways, and scenic water hazards. With a picturesque landscape and meticulously maintained greens, golfers can enjoy a serene yet competitive round of golf.',
-    ),
-    GolfCourse(
-      imagePath: 'assets/golfclubPlaceholder.png',
-      title: 'Course Number Two',
-      holes: 18,
-      par: 72,
-      description: 'Nestled in the heart of lush greenery, Hackathon Golf Course offers an exceptional golfing experience for players of all skill levels. This 18-hole, par-72 championship course is designed to challenge and inspire, featuring strategically placed bunkers, rolling fairways, and scenic water hazards. With a picturesque landscape and meticulously maintained greens, golfers can enjoy a serene yet competitive round of golf.',
     ),
   ];
 
@@ -32,9 +28,7 @@ class SplashGolfClubAppCourse extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         backgroundColor: Colors.white,
-        appBar: PreferredSize(
-            preferredSize: Size.fromHeight(50), // Height of your custom header
-            child: Header(title: 'SPLASH GOLF CLUB')),
+        appBar: Header(title: 'SPLASH GOLF CLUB'),
         body: SingleChildScrollView(
           child: SafeArea(
             child: Center(
@@ -50,7 +44,7 @@ class SplashGolfClubAppCourse extends StatelessWidget {
                       'Discover Our Golf Courses',
                       style: TextStyle(
                         fontSize: 24,
-                        color: Colors.blue,
+                        color: Colors.green,
                         fontWeight: FontWeight.bold,
                       ),
                       textAlign: TextAlign.center,
@@ -75,14 +69,24 @@ class SplashGolfClubAppCourse extends StatelessWidget {
                   SizedBox(height: 16),
                   ...golfCourses.map((course) {
                     return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
+                      onTap     : () async {
+                        final prefs = await SharedPreferences.getInstance();
+                        int? savedUserID = prefs.getInt('userID');
+
+                        if (savedUserID != null){
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
                             builder: (context) =>
-                                GolfCourseDetailsPage(course: course),
+                            GolfCourseDetailsPage(course: course),
                           ),
                         );
+                        }else{
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => LoginPage()),
+                          );
+                        };
                       },
                       child: GolfCourseCard(
                         imagePath: course.imagePath,

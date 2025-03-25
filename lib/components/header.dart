@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:splashgolfclub/screens/coursesPage.dart';
+import 'package:splashgolfclub/screens/homePage.dart';
+import 'package:splashgolfclub/screens/loginPage.dart';
+import 'package:splashgolfclub/screens/profilePage.dart';
 
-class Header extends StatelessWidget {
+class Header extends StatelessWidget implements PreferredSizeWidget {
   final String title;
 
-  const Header({Key? key, required this.title}) : super(key: key);
+  Header({required this.title});
+
+  @override
+  Size get preferredSize => Size.fromHeight(80.0); // Define the height of the AppBar
 
   @override
   Widget build(BuildContext context) {
@@ -18,12 +24,19 @@ class Header extends StatelessWidget {
             onTap: () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => SplashGolfClubAppCourse()), // Replace with your home page widget
+                MaterialPageRoute(builder: (context) => SplashGolfClubApp()),
               );
             },
             child: Row(
               children: [
-                const Icon(Icons.sports_golf, size: 34.0, color: Colors.green),
+                Container(
+                  width: 50.0, // Adjust width
+                  height: 50.0, // Adjust height
+                  child: Image.asset(
+                    'assets/favicon.webp',
+                    fit: BoxFit.contain,  // Maintains aspect ratio
+                  ),
+                ),
                 const SizedBox(width: 8.0),
                 Text(
                   title,
@@ -35,7 +48,19 @@ class Header extends StatelessWidget {
               ],
             ),
           ),
-          Icon(Icons.menu, size: 34.0),
+          GestureDetector(
+            onTap: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => LoginPage()),
+              );
+            },
+            child: Row(
+              children: [
+                const Icon(Icons.person, size: 34.0, color: Colors.green),
+              ],
+            ),
+          ),
         ],
       ),
     );

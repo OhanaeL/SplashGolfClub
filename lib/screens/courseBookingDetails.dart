@@ -11,6 +11,9 @@ class BookingDetailsScreen extends StatefulWidget {
   final String courseType;
   final String date;
   final String time;
+  final dynamic julianDate;
+  final dynamic julianTime;
+  final String courseId;
 
   // Constructor to accept data from the previous screen
   BookingDetailsScreen({
@@ -19,6 +22,9 @@ class BookingDetailsScreen extends StatefulWidget {
     required this.courseType,
     required this.date,
     required this.time,
+    required this.julianDate,
+    required this.julianTime,
+    required this.courseId
   });
 
   @override
@@ -49,9 +55,7 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: PreferredSize(
-          preferredSize: Size.fromHeight(50), // Height of your custom header
-          child: Header(title: 'SPLASH GOLF CLUB')),
+      appBar: Header(title: 'SPLASH GOLF CLUB'),
       body: SingleChildScrollView(
         child: SafeArea(
             child: Stack(
@@ -119,6 +123,9 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                                           carts: items[3]["count"],
                                           food: items[4]["count"],
                                           totalPrice: totalPrice as double,
+                                          julianDate: widget.julianDate,
+                                          julianTime: widget.julianTime,
+                                          courseId: widget.courseId,
                                         ),
                                   ),
                                 );

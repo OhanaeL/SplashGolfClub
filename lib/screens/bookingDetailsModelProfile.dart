@@ -1,23 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:splashgolfclub/components/header.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class BookingDetailsModel extends StatelessWidget {
+class BookingDetailsModelProfile extends StatefulWidget {
   final String courseName;
-  final String imagePath;
-  final String courseType;
-  final String date;
-  final String time;
+  final int courseType;
+  final int date;
+  final int time;
   final int golfers;
   final int guests;
   final int caddies;
   final int carts;
   final int food;
   final int totalPrice;
+  final String paymentType;
+  final int paidAmount;
+  final String status;
 
-  const BookingDetailsModel({
+  const BookingDetailsModelProfile({
     Key? key,
+    required this.status,
     required this.courseName,
-    required this.imagePath,
     required this.courseType,
     required this.date,
     required this.time,
@@ -26,9 +31,34 @@ class BookingDetailsModel extends StatelessWidget {
     required this.caddies,
     required this.carts,
     required this.food,
+    required this.paymentType,
+    required this.paidAmount,
     required this.totalPrice,
   }) : super(key: key);
 
+  @override
+  _BookingDetailsModelProfileState createState() => _BookingDetailsModelProfileState();
+}
+
+class _BookingDetailsModelProfileState extends State<BookingDetailsModelProfile> {
+
+  String convertToTime(int minutes) {
+    final DateTime now = DateTime(2025, 3, 22, 0, 0);
+    final DateTime time = now.add(Duration(minutes: minutes));
+    return DateFormat('h:mm a').format(time);
+  }
+  String julianDateToReadableFormat(int julianDate) {
+    // Base date: December 30, 1899
+    DateTime baseDate = DateTime(1899, 12, 30);
+
+    // Add the Julian date to the base date
+    DateTime readableDate = baseDate.add(Duration(days: julianDate));
+
+    // Format the DateTime to a readable format
+    String formattedDate = DateFormat('yyyy-MM-dd').format(readableDate);
+
+    return formattedDate;
+  }
   String formatDate(dynamic date) {
     if (date is DateTime) {
       return _formatDate(date);
@@ -38,6 +68,25 @@ class BookingDetailsModel extends StatelessWidget {
       return 'Invalid date format';
     }
   }
+
+  String teeTimeToReadableFormat(int teeTime) {
+    // Calculate the hours and minutes from the tee time (in minutes)
+    int hours = teeTime ~/ 60;  // Integer division for hours
+    int minutes = teeTime % 60; // Remainder for minutes
+
+    // Determine AM or PM
+    String amPm = hours >= 12 ? 'PM' : 'AM';
+
+    // Convert hours from 24-hour to 12-hour format
+    hours = hours % 12;
+    hours = hours == 0 ? 12 : hours; // If hours is 0, set it to 12 for AM/PM format
+
+    // Format the time as a readable string (HH:mm AM/PM)
+    String formattedTime = '$hours:${minutes.toString().padLeft(2, '0')} $amPm';
+
+    return formattedTime;
+  }
+
 
   String formatTime(dynamic time, BuildContext context) {
     if (time is TimeOfDay) {
@@ -99,18 +148,12 @@ class BookingDetailsModel extends StatelessWidget {
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: Image.asset(imagePath,
-                                      width: 60, height: 60, fit: BoxFit.cover),
-                                ),
-                                SizedBox(width: 12),
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(courseName,
+                                      Text(widget.courseName,
                                           style: TextStyle(
                                               fontSize: 18,
                                               fontWeight: FontWeight.bold)),
@@ -128,27 +171,33 @@ class BookingDetailsModel extends StatelessWidget {
                             SizedBox(height: 12),
                             Divider(),
                             _buildDetailRow(
-                                Icons.golf_course, 'Booking Type', courseType),
+                                Icons.golf_course, 'Booking Type', widget.courseType == 1? "9 Hole": "18 Hole"),
                             _buildDetailRow(Icons.calendar_today, 'Tee Date',
-                                '${formatDate(date)}'),
+                                '${julianDateToReadableFormat(widget.date)}'),
                             _buildDetailRow(Icons.access_time, 'Tee Time',
-                                '${formatTime(time, context)}'),
+                                '${teeTimeToReadableFormat(widget.time)}'),
                             SizedBox(height: 12),
                             Divider(),
                             _buildDetailRow(
-                                Icons.person, 'Golfers', '$golfers'),
+                                Icons.person, 'Golfers', '${widget.golfers}'),
                             _buildDetailRow(
-                                Icons.group, 'Accompanying Persons', '$guests'),
+                                Icons.group, 'Accompanying Persons', '${widget.guests}'),
                             _buildDetailRow(
-                                Icons.shopping_cart, 'Caddies', '$caddies'),
+                                Icons.shopping_cart, 'Caddies', '${widget.caddies}'),
                             _buildDetailRow(
-                                Icons.local_taxi, 'Golf Carts', '$carts'),
+                                Icons.local_taxi, 'Golf Carts', '${widget.carts}'),
                             _buildDetailRow(
-                                Icons.fastfood, 'Food & Drinks', '$food'),
+                                Icons.fastfood, 'Food & Drinks', '${widget.food}'),
                             SizedBox(height: 12),
                             Divider(),
+                            _buildDetailRow(Icons.attach_money, 'Payment Type',
+                                '${widget.paymentType}',
+                                isBold: true),
+                            _buildDetailRow(Icons.attach_money, 'Paid Amount',
+                                '${widget.paidAmount} THB',
+                                isBold: true),
                             _buildDetailRow(Icons.attach_money, 'Total Price',
-                                '$totalPrice THB',
+                                '${widget.totalPrice} THB',
                                 isBold: true),
                           ],
                         ),

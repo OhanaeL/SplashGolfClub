@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:splashgolfclub/class/golfCourse.dart';
 import 'package:splashgolfclub/components/header.dart';
 import 'package:splashgolfclub/components/holesDetails.dart';
@@ -7,6 +8,7 @@ import 'package:splashgolfclub/components/priceTable.dart';
 import 'package:splashgolfclub/components/tag.dart';
 import 'package:splashgolfclub/screens/bookingDetailsModel.dart';
 import 'package:splashgolfclub/screens/courseBookingTeeTime.dart';
+import 'package:splashgolfclub/screens/loginPage.dart';
 
 class GolfCourseDetailsPage extends StatelessWidget {
   final GolfCourse course;
@@ -28,9 +30,7 @@ class GolfCourseDetailsPage extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         backgroundColor: Colors.white,
-        appBar: PreferredSize(
-            preferredSize: Size.fromHeight(50), // Height of your custom header
-            child: Header(title: "SPLASH GOLF CLUB")),
+        appBar: Header(title: 'SPLASH GOLF CLUB'),
         body: SingleChildScrollView(
           child: SafeArea(
               child: Stack(
@@ -98,17 +98,28 @@ class GolfCourseDetailsPage extends StatelessWidget {
                           ),
                           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 18), // Button size
                         ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  BookingScreen(
-                                    courseName: course.title,
-                                    imagePath: course.imagePath,
-                                  ),
-                            ),
-                          );
+                        onPressed: () async {
+                          final prefs = await SharedPreferences.getInstance();
+                          int? savedUserID = prefs.getInt('userID');
+                          print(savedUserID);
+                          if (savedUserID != null){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    BookingScreen(
+                                      courseId: course.courseId,
+                                      courseName: course.title,
+                                      imagePath: course.imagePath,
+                                    ),
+                              ),
+                            );
+                          }else{
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => LoginPage()),
+                            );
+                          }
                         },
                         child: Text(
                           "Next",

@@ -1,5 +1,6 @@
 class GolfCourse {
   final String imagePath;
+  final String courseId;
   final String title;
   final int holes;
   final int par;
@@ -11,5 +12,6 @@ class GolfCourse {
     required this.holes,
     required this.par,
     required this.description,
+    required this.courseId
   });
 }

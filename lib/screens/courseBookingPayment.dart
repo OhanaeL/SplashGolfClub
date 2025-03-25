@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:splashgolfclub/components/header.dart';
 import 'package:splashgolfclub/screens/bookingDetailsModel.dart';
 import 'package:splashgolfclub/screens/courseBookingSuccess.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:splashgolfclub/screens/loginPage.dart';
+import 'package:uuid/uuid.dart';
 
 class PaymentScreen extends StatefulWidget {
   final String courseName;
+  final String courseId;
   final String imagePath;
   final String courseType;
   final String date;
@@ -15,20 +21,25 @@ class PaymentScreen extends StatefulWidget {
   final int carts;
   final int food;
   final double totalPrice;
+  final dynamic julianDate;
+  final dynamic julianTime;
 
   // Constructor to accept data from the previous screen
   PaymentScreen({
-  required this.courseName,
-  required this.imagePath,
-  required this.courseType,
-  required this.date,
-  required this.time,
-  required this.golfers,
-  required this.guests,
-  required this.caddies,
-  required this.carts,
-  required this.food,
-  required this.totalPrice,
+    required this.courseId,
+    required this.courseName,
+    required this.imagePath,
+    required this.courseType,
+    required this.date,
+    required this.time,
+    required this.golfers,
+    required this.guests,
+    required this.caddies,
+    required this.carts,
+    required this.food,
+    required this.totalPrice,
+    required this.julianDate,
+    required this.julianTime,
   });
 
   @override
@@ -38,7 +49,6 @@ class PaymentScreen extends StatefulWidget {
 class _PaymentScreenState extends State<PaymentScreen> {
 
   bool isFullPayment = true;
-  final int totalAmount = 1100;
 
   String selectedPaymentMethod = "Credit Card";
   final TextEditingController cardNumberController = TextEditingController();
@@ -48,10 +58,68 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   bool isLoading = false;
 
+
+  Future<void> postData(String apiRoute, Map<String, dynamic> data) async {
+    const String apiDatabase = "https://placeholderdatabase.onrender.com";
+
+    try {
+      final response = await http.post(
+        Uri.parse('$apiDatabase/$apiRoute'),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(data),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        print("Response: ${response.body}");
+      } else {
+        print("Error: ${response.statusCode} - ${response.body}");
+      }
+    } catch (error) {
+      print("Error fetching data: $error");
+    }
+  }
+
+
   void submitPayment() async {
     setState(() {
       isLoading = true;
     });
+
+    final prefs = await SharedPreferences.getInstance();
+    int? savedUserID = prefs.getInt('userID');
+
+    if (savedUserID == null){
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => LoginPage()), // Replace with the desired page
+      );
+    }
+
+    var uuid = Uuid();
+
+    var bookingData = {
+      "courseId": widget.courseId,
+      "courseImageUID":"",
+      "courseLocation":"52 347 Phahonyothin Rd, Tambon Lak Hok, Amphoe Mueang Pathum Thani",
+      "courseName":widget.courseName,
+      "bookingType":widget.courseType == "9 Hole" ? 1 : 2,
+      "clientID":savedUserID.toString(),
+      "teeDate":widget.julianDate,
+      "teeTime":widget.julianTime,
+      "numberOfGolfers":widget.golfers,
+      "numberOfnonPlayers":widget.guests,
+      "Golf Cart":widget.carts,
+      "Caddies":widget.caddies,
+      "Food & Drinks":widget.food,
+      "Golfer Names": List.generate(widget.guests, (index) => "Golfer ${index + 1}"),
+      "status":"prepaid",
+      "paymentType":isFullPayment? "fullPayment": "prepaid",
+      "paid":isFullPayment ? widget.totalPrice : (widget.totalPrice * 0.3).toInt(),
+      "price":widget.totalPrice,
+      "id": uuid.v4()
+    };
+
+    postData("bookings", bookingData);
 
     // Perform the actual payment logic here
     ScaffoldMessenger.of(context).showSnackBar(
@@ -88,9 +156,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: PreferredSize(
-          preferredSize: Size.fromHeight(50), // Height of your custom header
-          child: Header(title: 'SPLASH GOLF CLUB')),
+      appBar: Header(title: 'SPLASH GOLF CLUB'),
       body: SingleChildScrollView(
         child: SafeArea(
             child: Stack(
@@ -163,7 +229,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
-                                "${isFullPayment ? totalAmount : (totalAmount * 0.3).toInt()} THB",
+                                "${isFullPayment ? widget.totalPrice : (widget.totalPrice * 0.3).toInt()} THB",
                                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                               ),
                             ),

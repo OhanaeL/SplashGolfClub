@@ -15,10 +15,7 @@ class SplashGolfClubApp extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         backgroundColor: Colors.white,
-        appBar: PreferredSize(
-            preferredSize: Size.fromHeight(50), // Height of your custom header
-            child: Header(title: 'SPLASH GOLF CLUB')
-        ),
+        appBar: Header(title: 'SPLASH GOLF CLUB'),
         body: SingleChildScrollView(
           child: SafeArea(
             child: Center(
@@ -33,7 +30,7 @@ class SplashGolfClubApp extends StatelessWidget {
                         'Always Ready Just Like Your Best Swing',
                         style: TextStyle(
                           fontSize: 24,
-                          color: Colors.blue,
+                          color: Colors.green,
                           fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
@@ -53,11 +50,11 @@ class SplashGolfClubApp extends StatelessWidget {
                             onPressed: () {
                               Navigator.pushReplacement(
                                 context,
-                                MaterialPageRoute(builder: (context) => SplashGolfClubAppCourse()), // Replace with your home page widget
+                                MaterialPageRoute(builder: (context) => CoursesPage()), // Replace with your home page widget
                               );
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blue,
+                              backgroundColor: Colors.green,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20),
                               ),
@@ -129,7 +126,7 @@ class SplashGolfClubApp extends StatelessWidget {
                         'Plan Your Week Ahead on Our Course',
                         style: TextStyle(
                           fontSize: 20,
-                          color: Colors.blue,
+                          color: Colors.green,
                           fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
@@ -170,7 +167,7 @@ class SplashGolfClubApp extends StatelessWidget {
                               'What Our Customers Say',
                               style: TextStyle(
                                 fontSize: 20,
-                                color: Colors.blue,
+                                color: Colors.green,
                                 fontWeight: FontWeight.bold,
                               ),
                               textAlign: TextAlign.center,
