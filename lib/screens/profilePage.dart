@@ -3,6 +3,7 @@ import 'package:splashgolfclub/components/header.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:splashgolfclub/screens/bookingDetailsModelProfile.dart';
+import 'package:splashgolfclub/screens/coursesPage.dart';
 import 'package:splashgolfclub/screens/loginPage.dart';
 import 'package:http/http.dart' as http;
 
@@ -427,17 +428,31 @@ class _ProfilePageState extends State<ProfilePage> {
             children: [
               Text('Bookings', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               SizedBox(height: 8),
-              SizedBox(
-                width: 400,
-                height: 50 * filteredBookings.length.toDouble(),
-                child: ListView.builder(
-                  itemCount: filteredBookings.length,
-                  itemBuilder: (context, index) {
-                    Map booking = filteredBookings[index];
-                    String courseName = booking['courseName'];
+            filteredBookings.isEmpty
+                ? const Text('No Booking Available')
+                : SizedBox(
+              width: 400,
+              height: 50 * filteredBookings.length.toDouble(),
+              child: ListView.builder(
+                itemCount: filteredBookings.length,
+                itemBuilder: (context, index) {
+                  Map booking = filteredBookings[index];
+                  String courseName = booking['courseName'];
 
-                    return ListTile(
-                      title: TextButton(
+                  return ListTile(
+                    title: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white, // Button background color
+                        borderRadius: BorderRadius.circular(5), // Rounded corners
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black26, // Shadow color
+                            blurRadius: 4, // Blur effect
+                            offset: Offset(2, 2), // Shadow position
+                          ),
+                        ],
+                      ),
+                      child: TextButton(
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -460,20 +475,42 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           );
                         },
-                        child: Text('Booking at $courseName'),
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20), // Button padding
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8), // Border radius
+                          ),
+                        ),
+                        child: Text(
+                          'Golf Booking at $courseName',
+                          style: TextStyle(
+                            color: Colors.black, // Text color
+                            fontSize: 16, // Text size Bold text
+                          ),
+                        ),
                       ),
-                    );
-                  },
-                ),
+                    )
+
+                  );
+                },
               ),
-              Text('No Booking Available'),
-              SizedBox(height: 8),
+            ),
+
+            SizedBox(height: 8),
               Center(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green[800],
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            CoursesPage(),
+                      ),
+                    );
+                  },
                   child: Text('Go to Golf Courses',
                     style: TextStyle(
                         color: Colors.white

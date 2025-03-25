@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:splashgolfclub/components/header.dart';
 import 'package:splashgolfclub/screens/coursesPage.dart';
+import 'package:splashgolfclub/screens/profilePage.dart';
 
 class BookingConfirmationScreen extends StatelessWidget {
   final String courseName;
@@ -226,7 +227,7 @@ class BookingConfirmationScreen extends StatelessWidget {
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) =>
-                                                CoursesPage(),
+                                                ProfilePage(),
                                           ),
                                         );
                                       },
